@@ -51,7 +51,8 @@ class ChannelHrefExtractor:
                 print(f"Haciendo clic en la categoría {i + 1} de {len(categories)}")
                 category.click()
                 time.sleep(3)  # Esperar 5 segundos para que los canales de la categoría carguen
-
+                if i == 2:
+                    self.click_expand_guide()
                 hrefs = self.get_channel_hrefs()
                 for href in hrefs:
                     # Extraer la parte del enlace para comparación
@@ -62,7 +63,6 @@ class ChannelHrefExtractor:
 
                 # Después de cambiar de categoría la primera vez, hacer clic en "Guía de Canales de TV"
                 if i == 5:
-                    self.click_expand_guide()
                     self.scroll_down_category_list()
                                     
             except Exception as e:

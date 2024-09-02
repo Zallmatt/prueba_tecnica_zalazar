@@ -64,7 +64,7 @@ class read_data:
 
     def extract_details_series(self, url):
         self.driver.get(url)
-        time.sleep(10)
+        time.sleep(15)
         self.wait_for_element((By.CLASS_NAME, 'name-0-2-233'))
 
         try:
