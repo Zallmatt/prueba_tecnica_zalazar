@@ -12,7 +12,7 @@ class read_data:
     def wait_for_element(self, locator):
         return WebDriverWait(self.driver, 30).until(EC.presence_of_element_located(locator))
         
-    def extract_details(self, url):
+    def extract_details_movies(self, url):
         self.driver.get(url)
         time.sleep(10)
         self.wait_for_element((By.CLASS_NAME, 'name-0-2-233'))
@@ -61,11 +61,66 @@ class read_data:
             "Duracion": duration
         }
 
-    def process_urls(self, urls):
+
+    def extract_details_series(self, url):
+        self.driver.get(url)
+        time.sleep(10)
+        self.wait_for_element((By.CLASS_NAME, 'name-0-2-233'))
+
+        try:
+            title = self.driver.find_element(By.CLASS_NAME, 'name-0-2-233').text
+        except Exception as e:
+            print(f"Error al extraer el título: {e}")
+            title = "N/A"
+
+        try:
+            synopsis = self.driver.find_element(By.CLASS_NAME, 'description-0-2-236').text
+        except Exception as e:
+            print(f"Error al extraer la sinopsis: {e}")
+            synopsis = "N/A"
+
+        try:
+            # Extraer el rating directamente del span con clase "rating"
+            rating_element = self.driver.find_element(By.XPATH, "//span[@class='rating']")
+            rating = rating_element.text if rating_element else "N/A"
+
+            # Extraer el género y la duración usando los metadatos
+            metadata_list = self.driver.find_element(By.XPATH, "//ul[contains(@class, 'metadata')]").find_elements(By.TAG_NAME, 'li')
+            
+            genre = next((item.text for item in metadata_list if item.text not in ["R", "PG", "PG-13", "G", "NR", "TV-MA", "TV-14", "TV-PG", "TV-G", "TV-Y", "TV-Y7", "", " "]), "N/A")
+            duration = next((item.text for item in metadata_list if "porada" in item.text), "N/A")
+            
+        except Exception as e:
+            print(f"Error al extraer la duración, género y rating: {e}")
+            rating = duration = genre = "N/A"
+
+        print(f"Titulo: {title}")
+        print(f"Rating: {rating}")
+        print(f"Genero: {genre}")
+        print(f"Descripcion: {synopsis}")
+        print(f"Link: {url}")
+        print(f"Temporadas: {duration}")
+        print('-' * 40)
+
+        return {
+            "Titulo": title,
+            "Rating": rating,
+            "Genero": genre,
+            "Descripcion": synopsis,
+            "Link": url,
+            "Duracion": duration
+        }
+
+
+    def process_urls(self, urls, ejecutar):
         all_data = []
         for url in urls:
-            data = self.extract_details(url)
-            all_data.append(data)  # Agregar cada resultado a la lista
+            if ejecutar == "peliculas":
+                data = self.extract_details_movies(url)
+                all_data.append(data)  # Agregar cada resultado a la lista
+            elif ejecutar == "series":
+                data = self.extract_details_series(url)
+                all_data.append(data)  # Agregar cada resultado a la lista
         return all_data
 
     def close(self):
