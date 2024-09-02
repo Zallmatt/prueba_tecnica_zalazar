@@ -101,14 +101,12 @@ class read_data:
                     # Extraer el título del episodio
                     episode_title = episode.find_element(By.CLASS_NAME, 'episode-name-atc').text
                     
-                # Extraer todos los spans dentro de la clase 'numbers'
+                    # Extraer todos los spans dentro de la clase 'numbers'
                     spans = episode.find_elements(By.CSS_SELECTOR, '.numbers span')
                     
                     # Asumiendo que el primer span contiene el número de episodio y el segundo la duración
                     episode_number = spans[0].text if len(spans) > 0 else "N/A"
                     episode_duration = spans[1].text if len(spans) > 1 else "N/A"
-                    print(f"Episode Number: {episode_number}")
-                    print(f"Episode Duration: {episode_duration}")
                     episode_description = episode.find_element(By.CLASS_NAME, 'episode-description-atc').text
                     
                     episodes_data.append({
