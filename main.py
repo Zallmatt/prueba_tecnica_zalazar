@@ -113,7 +113,7 @@ def process_series():
                 print(f"Error al procesar la URL {href}: {e}. Continuando con la siguiente URL.")
 
             # Guardar los resultados cada 10 iteraciones
-            if index == 1 or index == total_hrefs:
+            if index % 10 == 0  or index == total_hrefs:
                 df = pd.DataFrame(all_data)
                 if not df.empty:
                     file_exists = os.path.isfile('informacion_pluto_series.csv')
