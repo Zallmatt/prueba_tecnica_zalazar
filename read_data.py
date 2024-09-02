@@ -32,13 +32,14 @@ class read_data:
             synopsis = "N/A"
 
         try:
-            # Extraer el rating directamente del span con clase "rating"
+            #Busca la clase rating
             rating_element = self.driver.find_element(By.XPATH, "//span[@class='rating']")
             rating = rating_element.text if rating_element else "N/A"
 
-            # Extraer el género y la duración usando los metadatos
+            #Extrae los elementos li de la clase metadata
             metadata_list = self.driver.find_element(By.XPATH, "//ul[contains(@class, 'metadata')]").find_elements(By.TAG_NAME, 'li')
             
+            #Busca el genero 
             genre = next((item.text for item in metadata_list if item.text not in ["R", "PG", "PG-13", "G", "NR", "TV-MA", "TV-14", "TV-PG", "TV-G", "TV-Y", "TV-Y7", "", " "]), "N/A")
             duration = next((item.text for item in metadata_list if "min" in item.text), "N/A")
             
@@ -65,7 +66,7 @@ class read_data:
 
     def extract_details_series(self, url):
         self.driver.get(url)
-        time.sleep(15)  # Espera para asegurarse de que la página cargue completamente
+        time.sleep(15)
         self.wait_for_element((By.CLASS_NAME, 'name-0-2-233'))
 
         try:
@@ -91,20 +92,20 @@ class read_data:
             print(f"Error al extraer la duración, género y rating: {e}")
             rating = duration = genre = "N/A"
 
-        # Extraer los episodios de la temporada cargada
+        #Extrae los episodios de la pagina cargada
         try:
             episodes_data = []
             episode_elements = self.driver.find_elements(By.CLASS_NAME, 'episode-container-atc')
 
             for episode in episode_elements:
                 try:
-                    # Extraer el título del episodio
+                    #Extraer el título del episodio
                     episode_title = episode.find_element(By.CLASS_NAME, 'episode-name-atc').text
                     
-                    # Extraer todos los spans dentro de la clase 'numbers'
+                    #Extraer todos los spans dentro de la clase 'numbers'
                     spans = episode.find_elements(By.CSS_SELECTOR, '.numbers span')
                     
-                    # Asumiendo que el primer span contiene el número de episodio y el segundo la duración
+                    #Asumiendo que el primer span contiene el número de episodio y el segundo la duración
                     episode_number = spans[0].text if len(spans) > 0 else "N/A"
                     episode_duration = spans[1].text if len(spans) > 1 else "N/A"
                     episode_description = episode.find_element(By.CLASS_NAME, 'episode-description-atc').text
@@ -124,7 +125,7 @@ class read_data:
                     })
                 except Exception as e:
                     print(f"Error al extraer detalles de un episodio: {e}")
-                    continue  # Saltar al siguiente episodio en caso de error
+                    continue 
         except Exception as e:
             print(f"Error al extraer los episodios: {e}")
             episodes_data = []
@@ -135,16 +136,16 @@ class read_data:
 
     def extract_details_channels(self, url):
         self.driver.get(url)
-        time.sleep(5)  # Esperar a que cargue la página
+        time.sleep(5) 
 
-        # Buscar el título utilizando una clase que contenga "name-0-2-"
+        #Buscar el título utilizando una clase que contenga "name-0-2-"
         try:
             title = self.driver.find_element(By.CSS_SELECTOR, "[class^='name-0-2-']").text
         except Exception as e:
             print(f"Error al extraer el título: {e}")
             title = "N/A"
 
-        # Buscar la sinopsis utilizando una clase que contenga "description-0-2-"
+        #Buscar la descripcion utilizando una clase que contenga "description-0-2-"
         try:
             synopsis = self.driver.find_element(By.CSS_SELECTOR, "[class^='description-0-2-']").text
         except Exception as e:
@@ -168,10 +169,10 @@ class read_data:
         for url in urls:
             if ejecutar == "peliculas":
                 data = self.extract_details_movies(url)
-                all_data.append(data)  # Agregar cada resultado a la lista
+                all_data.append(data) 
             elif ejecutar == "series":
                 data = self.extract_details_series(url)
-                all_data.append(data)  # Agregar cada resultado a la lista
+                all_data.append(data) 
         return all_data
 
     def close(self):

@@ -32,32 +32,31 @@ def process_movies():
     ]
     all_data = []
     page_loader = LoadPage()
-    existing_hrefs = page_loader.load_existing_hrefs('informacion_pluto_movies.csv')  # Cargar los enlaces existentes
-    data_loader = None  # Inicializar data_loader en None 
+    existing_hrefs = page_loader.load_existing_hrefs('informacion_pluto_movies.csv')  # Leer los enlaces ya cargados
+    data_loader = None 
     
     try:
-        # Procesar las URLs de las categorías y obtener los hrefs de las películas
+        #Procesar las URLs de las categorias y obtener los hrefs de cada pelicula
         hrefs = page_loader.process_urls(urls_movies, 'movies', existing_hrefs)
 
-        # Inicializa la clase para extraer los detalles de cada href
         data_loader = read_data()
         page_loader.close()
 
         total_hrefs = len(hrefs)
         print(f"Total de URLs de películas a procesar: {total_hrefs}")
 
-        # Itera sobre cada href y extrae los detalles
+        #Itera sobre cada href y extrae los detalles
         for index, href in enumerate(hrefs, start=1):
             print(f"Procesando URL {index} de {total_hrefs}: {href}")
             try:
                 data = data_loader.extract_details_movies(href)
-                all_data.append(data)  # Agrega los detalles a la lista
+                all_data.append(data)  
             except TimeoutException:
                 print(f"Error de tiempo de espera al procesar la URL: {href}. Continuando con la siguiente URL.")
             except Exception as e:
                 print(f"Error al procesar la URL {href}: {e}. Continuando con la siguiente URL.")
-
-            if index == 1 or index == total_hrefs:
+            #Guardar los resultados cada 10 iteraciones o al final del procesamiento
+            if index % 10 == 0 or index == total_hrefs:
                 df = pd.DataFrame(all_data, columns=[
                     "Titulo",
                     "Rating",
@@ -69,11 +68,11 @@ def process_movies():
                 if not df.empty:
                     file_exists = os.path.isfile('informacion_pluto_movies.csv')
                     df.to_csv('informacion_pluto_movies.csv', mode='a', header=not file_exists, index=False)
-                    all_data.clear()  # Limpiar la lista después de guardar para evitar duplicados
+                    all_data.clear() 
                 print(f"Progreso guardado: {index} de {total_hrefs} URLs procesadas")
 
     finally:
-        if data_loader:  # Solo cierra data_loader si ha sido inicializado
+        if data_loader:  
             data_loader.close()
 
 def process_series():
@@ -92,33 +91,32 @@ def process_series():
     ]
     all_data = []
     page_loader = LoadPage()
-    existing_hrefs = page_loader.load_existing_hrefs('informacion_pluto_series.csv')  # Cargar los enlaces existentes
-    data_loader = None  # Inicializar data_loader en None
+    existing_hrefs = page_loader.load_existing_hrefs('informacion_pluto_series.csv')  #Leer los enlaces ya cargados
+    data_loader = None  
 
     try:
-        # Procesar las URLs de las categorías y obtener los hrefs de las series
+        #Procesar las URLs de las categorías y obtener los hrefs de las series
         hrefs = page_loader.process_urls(urls_series, 'series', existing_hrefs)
 
-        # Inicializa la clase para extraer los detalles de cada href
         data_loader = read_data()
         page_loader.close()
 
         total_hrefs = len(hrefs)
         print(f"Total de URLs de series a procesar: {total_hrefs}")
 
-        # Itera sobre cada href y extrae los detalles
+        #Itera sobre cada href y extrae los detalles
         for index, href in enumerate(hrefs, start=1):
             print(f"Procesando URL {index} de {total_hrefs}: {href}")
             try:
                 episodes_data = data_loader.extract_details_series(href)
-                all_data.extend(episodes_data)  # Agregar los detalles de los episodios a la lista de datos
+                all_data.extend(episodes_data)  
             except TimeoutException:
                 print(f"Error de tiempo de espera al procesar la URL: {href}. Continuando con la siguiente URL.")
             except Exception as e:
                 print(f"Error al procesar la URL {href}: {e}. Continuando con la siguiente URL.")
 
-            # Guardar los resultados cada 10 iteraciones o al final del procesamiento
-            if index == 1 or index == total_hrefs:
+            #Guardar los resultados cada 10 iteraciones o al final del procesamiento
+            if index % 10 == 0 or index == total_hrefs:
                 df = pd.DataFrame(all_data, columns=[
                     "Titulo", 
                     "Rating", 
@@ -135,45 +133,45 @@ def process_series():
                 if not df.empty:
                     file_exists = os.path.isfile('informacion_pluto_series.csv')
                     df.to_csv('informacion_pluto_series.csv', mode='a', header=not file_exists, index=False)
-                    all_data.clear()  # Limpiar la lista después de guardar para evitar duplicados
+                    all_data.clear()  
                 print(f"Progreso guardado: {index} de {total_hrefs} URLs procesadas")
     finally:
-        if data_loader:  # Solo cierra data_loader si ha sido inicializado
+        if data_loader:  
             data_loader.close()
 
 
 def process_channels():
     all_data = []
     extractor = ChannelHrefExtractor()
-    existing_hrefs = LoadPage().load_existing_hrefs('informacion_pluto_canales.csv')  # Cargar los enlaces existentes
+    existing_hrefs = LoadPage().load_existing_hrefs('informacion_pluto_canales.csv')  #Leer los enlaces ya cargados
     data_loader = None  # Inicializar data_loader en None
 
     try:
-        extractor.open_url('https://pluto.tv/latam/live-tv/63eb9255c111bc0008fe6ec4')  # URL de canales en vivo
+        extractor.open_url('https://pluto.tv/latam/live-tv/63eb9255c111bc0008fe6ec4') 
         hrefs = extractor.click_and_extract()
 
-        # Filtrar hrefs para no procesar los que ya están en el CSV
+        #Filtrar hrefs para no procesar los que ya están en el CSV
         hrefs = [href for href in hrefs if href not in existing_hrefs]
 
-        # Inicializa la clase para extraer los detalles de cada href
+        #Inicializa la clase para extraer los detalles de cada href
         data_loader = read_data()
 
         total_hrefs = len(hrefs)
         print(f"Total de URLs de canales a procesar: {total_hrefs}")
 
-        # Itera sobre cada href y extrae los detalles
+        #Itera sobre cada href y extrae los detalles
         for index, href in enumerate(hrefs, start=1):
             print(f"Procesando URL {index} de {total_hrefs}: {href}")
             try:
                 data = data_loader.extract_details_channels(href)
-                all_data.append(data)  # Agrega los detalles a la lista
+                all_data.append(data)  
             except TimeoutException:
                 print(f"Error de tiempo de espera al procesar la URL: {href}. Continuando con la siguiente URL.")
             except Exception as e:
                 print(f"Error al procesar la URL {href}: {e}. Continuando con la siguiente URL.")
 
-            # Guardar los resultados cada 10 iteraciones
-            if index == 1 or index == total_hrefs:
+            #Guardar los resultados cada 10 iteraciones
+            if index % 10 == 0 or index == total_hrefs:
                 df = pd.DataFrame(all_data, columns=[
                     "Titulo",
                     "Descripcion",
@@ -182,19 +180,19 @@ def process_channels():
                 if not df.empty:
                     file_exists = os.path.isfile('informacion_pluto_canales.csv')
                     df.to_csv('informacion_pluto_canales.csv', mode='a', header=not file_exists, index=False)
-                    all_data.clear()  # Limpiar la lista después de guardar para evitar duplicados
+                    all_data.clear()  
                 print(f"Progreso guardado: {index} de {total_hrefs} URLs procesadas")
     finally:
         extractor.close()
-        if data_loader:  # Solo cierra data_loader si ha sido inicializado
+        if data_loader:  
             data_loader.close()
 
 if __name__ == "__main__":
-    start_time = time.time()  # Anotar el tiempo de inicio
+    start_time = time.time() 
 
     try:
         print("Procesando películas...")
-        #process_movies()
+        process_movies()
 
         print("Procesando series...")
         process_series()
@@ -206,6 +204,6 @@ if __name__ == "__main__":
         print("Error de tiempo de espera al obtener los hrefs. Verifica si la página ha cargado correctamente.")
     
     finally:
-        end_time = time.time()  # Anotar el tiempo de finalización
-        elapsed_time = end_time - start_time  # Calcular el tiempo total de ejecución
+        end_time = time.time() 
+        elapsed_time = end_time - start_time  
         print(f"Tiempo total de ejecución: {elapsed_time:.2f} segundos")
