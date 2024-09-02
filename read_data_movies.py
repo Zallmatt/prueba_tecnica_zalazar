@@ -111,6 +111,35 @@ class read_data:
             "Duracion": duration
         }
 
+    def extract_details_channels(self, url):
+        self.driver.get(url)
+        time.sleep(5)  # Esperar a que cargue la página
+
+        # Buscar el título utilizando una clase que contenga "name-0-2-"
+        try:
+            title = self.driver.find_element(By.CSS_SELECTOR, "[class^='name-0-2-']").text
+        except Exception as e:
+            print(f"Error al extraer el título: {e}")
+            title = "N/A"
+
+        # Buscar la sinopsis utilizando una clase que contenga "description-0-2-"
+        try:
+            synopsis = self.driver.find_element(By.CSS_SELECTOR, "[class^='description-0-2-']").text
+        except Exception as e:
+            print(f"Error al extraer la sinopsis: {e}")
+            synopsis = "N/A"
+
+        print(f"Titulo: {title}")
+        print(f"Descripcion: {synopsis}")
+        print(f"Link: {url}")
+        print('-' * 40)
+
+        return {
+            "Titulo": title,
+            "Descripcion": synopsis,
+            "Link": url,
+        }
+
 
     def process_urls(self, urls, ejecutar):
         all_data = []
