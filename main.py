@@ -1,6 +1,6 @@
-from read_href_on_demand_movies import LoadPage
-from read_data_movies import read_data
-from read_canales import ChannelHrefExtractor
+from read_href_on_demand import LoadPage
+from read_data import read_data
+from read_canales_live_tv import ChannelHrefExtractor
 import pandas as pd
 import time
 from selenium.common.exceptions import TimeoutException
@@ -33,7 +33,7 @@ def process_movies():
     all_data = []
     page_loader = LoadPage()
     existing_hrefs = page_loader.load_existing_hrefs('informacion_pluto_movies.csv')  # Cargar los enlaces existentes
-    data_loader = None  # Inicializar data_loader en None
+    data_loader = None  # Inicializar data_loader en None 
     
     try:
         # Procesar las URLs de las categorías y obtener los hrefs de las películas
@@ -78,7 +78,17 @@ def process_movies():
 
 def process_series():
     urls_series = [
-        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/5f908026a44d9c00081fd41d",
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/5f908026a44d9c00081fd41d", #Series para Maratonear
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/625db92c5c4b590007b808c6", #Dramas Coreanos
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/63dd2358a8b22700082367ff", #Series Checas
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/60941e09db549e0007ef2dc9", #Series Acción
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/60941dfa8ab0970007f41c59", #Series Sci-Fi
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/60941de9e03c74000701ed4f", #Series Suspenso
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/60941dc7fd0bc30007db1b6d", #Series Romance
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/5e2f061eeb7c04000967bf70", #Series Drama
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/5e45bbf395fb000009945cf0", #Series Comedia
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/62473ee1a8099000076c0783", #Series Españolas
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/6245c1e23ca9b400078727bc"  #Series Latinas
     ]
     all_data = []
     page_loader = LoadPage()
@@ -187,7 +197,7 @@ if __name__ == "__main__":
         #process_movies()
 
         print("Procesando series...")
-        #process_series()
+        process_series()
 
         print("Procesando canales...")
         process_channels()

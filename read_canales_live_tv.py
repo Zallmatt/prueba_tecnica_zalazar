@@ -86,11 +86,3 @@ class ChannelHrefExtractor:
 
     def close(self):
         self.driver.quit()
-
-# Uso de la clase
-if __name__ == "__main__":
-    extractor = ChannelHrefExtractor()
-    extractor.open_url('https://pluto.tv/latam/live-tv/63eb9255c111bc0008fe6ec4')  # Reemplaza con la URL correspondiente
-    hrefs = extractor.click_and_extract()
-    print(hrefs)
-    extractor.close()
