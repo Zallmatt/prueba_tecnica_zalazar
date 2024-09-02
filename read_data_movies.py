@@ -4,6 +4,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
 
 class read_data:
     def __init__(self):
@@ -61,10 +63,9 @@ class read_data:
             "Duracion": duration
         }
 
-
     def extract_details_series(self, url):
         self.driver.get(url)
-        time.sleep(15)
+        time.sleep(15)  # Espera para asegurarse de que la página cargue completamente
         self.wait_for_element((By.CLASS_NAME, 'name-0-2-233'))
 
         try:
@@ -80,36 +81,59 @@ class read_data:
             synopsis = "N/A"
 
         try:
-            # Extraer el rating directamente del span con clase "rating"
             rating_element = self.driver.find_element(By.XPATH, "//span[@class='rating']")
             rating = rating_element.text if rating_element else "N/A"
 
-            # Extraer el género y la duración usando los metadatos
             metadata_list = self.driver.find_element(By.XPATH, "//ul[contains(@class, 'metadata')]").find_elements(By.TAG_NAME, 'li')
-            
             genre = next((item.text for item in metadata_list if item.text not in ["R", "PG", "PG-13", "G", "NR", "TV-MA", "TV-14", "TV-PG", "TV-G", "TV-Y", "TV-Y7", "", " "]), "N/A")
-            duration = next((item.text for item in metadata_list if "porada" in item.text), "N/A")
-            
+            duration = next((item.text for item in metadata_list if "porada" in item.text or "eason" in item.text), "N/A")
         except Exception as e:
             print(f"Error al extraer la duración, género y rating: {e}")
             rating = duration = genre = "N/A"
 
-        print(f"Titulo: {title}")
-        print(f"Rating: {rating}")
-        print(f"Genero: {genre}")
-        print(f"Descripcion: {synopsis}")
-        print(f"Link: {url}")
-        print(f"Temporadas: {duration}")
-        print('-' * 40)
+        # Extraer los episodios de la temporada cargada
+        try:
+            episodes_data = []
+            episode_elements = self.driver.find_elements(By.CLASS_NAME, 'episode-container-atc')
 
-        return {
-            "Titulo": title,
-            "Rating": rating,
-            "Genero": genre,
-            "Descripcion": synopsis,
-            "Link": url,
-            "Duracion": duration
-        }
+            for episode in episode_elements:
+                try:
+                    # Extraer el título del episodio
+                    episode_title = episode.find_element(By.CLASS_NAME, 'episode-name-atc').text
+                    
+                # Extraer todos los spans dentro de la clase 'numbers'
+                    spans = episode.find_elements(By.CSS_SELECTOR, '.numbers span')
+                    
+                    # Asumiendo que el primer span contiene el número de episodio y el segundo la duración
+                    episode_number = spans[0].text if len(spans) > 0 else "N/A"
+                    episode_duration = spans[1].text if len(spans) > 1 else "N/A"
+                    print(f"Episode Number: {episode_number}")
+                    print(f"Episode Duration: {episode_duration}")
+                    episode_description = episode.find_element(By.CLASS_NAME, 'episode-description-atc').text
+                    
+                    episodes_data.append({
+                        "Titulo": title,
+                        "Rating": rating,
+                        "Genero": genre,
+                        "Descripcion": synopsis,
+                        "Temporadas": duration,
+                        "Link": url,
+                        "Titulo Capitulo": episode_title,
+                        "Episodio": episode_number,
+                        "Duracion": episode_duration,
+                        "Descripcion Capitulo": episode_description,
+                        "Link Capitulo": url
+                    })
+                except Exception as e:
+                    print(f"Error al extraer detalles de un episodio: {e}")
+                    continue  # Saltar al siguiente episodio en caso de error
+        except Exception as e:
+            print(f"Error al extraer los episodios: {e}")
+            episodes_data = []
+
+        return episodes_data
+
+
 
     def extract_details_channels(self, url):
         self.driver.get(url)

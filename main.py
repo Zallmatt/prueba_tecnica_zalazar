@@ -105,15 +105,15 @@ def process_series():
         for index, href in enumerate(hrefs, start=1):
             print(f"Procesando URL {index} de {total_hrefs}: {href}")
             try:
-                data = data_loader.extract_details_series(href)
-                all_data.append(data)  # Agrega los detalles a la lista
+                episodes_data = data_loader.extract_details_series(href)
+                all_data.extend(episodes_data)  # Agregar los detalles de los episodios a la lista de datos
             except TimeoutException:
                 print(f"Error de tiempo de espera al procesar la URL: {href}. Continuando con la siguiente URL.")
             except Exception as e:
                 print(f"Error al procesar la URL {href}: {e}. Continuando con la siguiente URL.")
 
             # Guardar los resultados cada 10 iteraciones
-            if index % 10 == 0 or index == total_hrefs:
+            if index == 1 or index == total_hrefs:
                 df = pd.DataFrame(all_data)
                 if not df.empty:
                     file_exists = os.path.isfile('informacion_pluto_series.csv')
@@ -124,6 +124,7 @@ def process_series():
     finally:
         if data_loader:  # Solo cierra data_loader si ha sido inicializado
             data_loader.close()
+
 
 def process_channels():
     all_data = []
@@ -174,13 +175,13 @@ if __name__ == "__main__":
 
     try:
         print("Procesando películas...")
-        process_movies()
+        #process_movies()
 
         print("Procesando series...")
         process_series()
 
         print("Procesando canales...")
-        process_channels()
+        #process_channels()
 
     except TimeoutException:
         print("Error de tiempo de espera al obtener los hrefs. Verifica si la página ha cargado correctamente.")
