@@ -144,22 +144,19 @@ def process_channels():
     all_data = []
     extractor = ChannelHrefExtractor()
     existing_hrefs = LoadPage().load_existing_hrefs('informacion_pluto_canales.csv')  #Leer los enlaces ya cargados
-    data_loader = None  # Inicializar data_loader en None
+    data_loader = None 
 
     try:
         extractor.open_url('https://pluto.tv/latam/live-tv/63eb9255c111bc0008fe6ec4') 
         hrefs = extractor.click_and_extract()
 
-        #Filtrar hrefs para no procesar los que ya están en el CSV
         hrefs = [href for href in hrefs if href not in existing_hrefs]
 
-        #Inicializa la clase para extraer los detalles de cada href
         data_loader = read_data()
 
         total_hrefs = len(hrefs)
         print(f"Total de URLs de canales a procesar: {total_hrefs}")
 
-        #Itera sobre cada href y extrae los detalles
         for index, href in enumerate(hrefs, start=1):
             print(f"Procesando URL {index} de {total_hrefs}: {href}")
             try:
@@ -170,7 +167,7 @@ def process_channels():
             except Exception as e:
                 print(f"Error al procesar la URL {href}: {e}. Continuando con la siguiente URL.")
 
-            #Guardar los resultados cada 10 iteraciones
+            #Guardar los resultados cada 10 iteraciones o al final del procesamiento
             if index % 10 == 0 or index == total_hrefs:
                 df = pd.DataFrame(all_data, columns=[
                     "Titulo",
