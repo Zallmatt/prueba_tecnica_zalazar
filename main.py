@@ -9,7 +9,27 @@ import os
 def process_movies():
     urls_movies = [
         "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/6245e3e75b72240007129448", 
-        # otras URLs
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/631a0596822bbc000747c340",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/604a66306fb8e0000718b7d5",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/6144cbd27bdf170007e1ea12",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/6419c584dbdaaa000845cad0",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e2efdab7606430009a60684",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/6245bf61a380fd00075eb902",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e664a3d461ef80007c74a4b",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e2f057012f8f9000947823a",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e664ad54d9608000711bf62",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e98ba08d29fad000774d8f1",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e45b93b0226550009f458f0",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e45b6c57cbf380009c9fd3c",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e45bb571dbf7b000935ab55",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/60cb966907f6370007c0e05e",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e664aac9cbc7000077f8ad9",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e98badabe135f0007f6fd38",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/60c0cc32c72308000700c61a",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/60cb97ae9f11af0007902c42",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/62473fdd9c333900071c587e",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5f90b50775cc210007c85400",
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/669eb36efe11e500084757fb"
     ]
     all_data = []
     page_loader = LoadPage()
@@ -38,14 +58,15 @@ def process_movies():
             except Exception as e:
                 print(f"Error al procesar la URL {href}: {e}. Continuando con la siguiente URL.")
 
-        # Crear un DataFrame con los datos obtenidos
-        df = pd.DataFrame(all_data)
+            # Guardar los resultados cada 10 iteraciones
+            if index % 10 == 0 or index == total_hrefs:
+                df = pd.DataFrame(all_data)
+                if not df.empty:
+                    file_exists = os.path.isfile('informacion_pluto_movies.csv')
+                    df.to_csv('informacion_pluto_movies.csv', mode='a', header=not file_exists, index=False)
+                    all_data.clear()  # Limpiar la lista después de guardar para evitar duplicados
+                print(f"Progreso guardado: {index} de {total_hrefs} URLs procesadas")
 
-        if not df.empty:
-            file_exists = os.path.isfile('informacion_pluto_movies.csv')
-            df.to_csv('informacion_pluto_movies.csv', mode='a', header=not file_exists, index=False)
-
-        print("Datos de películas guardados en informacion_pluto_movies.csv")
     finally:
         if data_loader:  # Solo cierra data_loader si ha sido inicializado
             data_loader.close()
@@ -53,7 +74,16 @@ def process_movies():
 def process_series():
     urls_series = [
         "https://pluto.tv/latam/on-demand/619043246d03190008131b89/5f908026a44d9c00081fd41d",
-        # otras URLs
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/625db92c5c4b590007b808c6",
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/63dd2358a8b22700082367ff",
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/60941e09db549e0007ef2dc9",
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/60941dfa8ab0970007f41c59",
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/60941de9e03c74000701ed4f",
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/60941dc7fd0bc30007db1b6d",
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/5e2f061eeb7c04000967bf70",
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/5e45bbf395fb000009945cf0",
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/62473ee1a8099000076c0783",
+        "https://pluto.tv/latam/on-demand/619043246d03190008131b89/6245c1e23ca9b400078727bc"
     ]
     all_data = []
     page_loader = LoadPage()
@@ -82,14 +112,15 @@ def process_series():
             except Exception as e:
                 print(f"Error al procesar la URL {href}: {e}. Continuando con la siguiente URL.")
 
-        # Crear un DataFrame con los datos obtenidos
-        df = pd.DataFrame(all_data)
+            # Guardar los resultados cada 10 iteraciones
+            if index % 10 == 0 or index == total_hrefs:
+                df = pd.DataFrame(all_data)
+                if not df.empty:
+                    file_exists = os.path.isfile('informacion_pluto_series.csv')
+                    df.to_csv('informacion_pluto_series.csv', mode='a', header=not file_exists, index=False)
+                    all_data.clear()  # Limpiar la lista después de guardar para evitar duplicados
+                print(f"Progreso guardado: {index} de {total_hrefs} URLs procesadas")
 
-        if not df.empty:
-            file_exists = os.path.isfile('informacion_pluto_series.csv')
-            df.to_csv('informacion_pluto_series.csv', mode='a', header=not file_exists, index=False)
-
-        print("Datos de series guardados en informacion_pluto_series.csv")
     finally:
         if data_loader:  # Solo cierra data_loader si ha sido inicializado
             data_loader.close()
@@ -124,14 +155,15 @@ def process_channels():
             except Exception as e:
                 print(f"Error al procesar la URL {href}: {e}. Continuando con la siguiente URL.")
 
-        # Crear un DataFrame con los datos obtenidos
-        df = pd.DataFrame(all_data)
+            # Guardar los resultados cada 10 iteraciones
+            if index % 10 == 0 or index == total_hrefs:
+                df = pd.DataFrame(all_data)
+                if not df.empty:
+                    file_exists = os.path.isfile('informacion_pluto_canales.csv')
+                    df.to_csv('informacion_pluto_canales.csv', mode='a', header=not file_exists, index=False)
+                    all_data.clear()  # Limpiar la lista después de guardar para evitar duplicados
+                print(f"Progreso guardado: {index} de {total_hrefs} URLs procesadas")
 
-        if not df.empty:
-            file_exists = os.path.isfile('informacion_pluto_canales.csv')
-            df.to_csv('informacion_pluto_canales.csv', mode='a', header=not file_exists, index=False)
-
-        print("Datos de canales guardados en informacion_pluto_canales.csv")
     finally:
         extractor.close()
         if data_loader:  # Solo cierra data_loader si ha sido inicializado
@@ -142,10 +174,10 @@ if __name__ == "__main__":
 
     try:
         print("Procesando películas...")
-        #process_movies()
+        process_movies()
 
         print("Procesando series...")
-        #process_series()
+        process_series()
 
         print("Procesando canales...")
         process_channels()

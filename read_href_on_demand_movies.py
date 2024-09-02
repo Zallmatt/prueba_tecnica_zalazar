@@ -72,8 +72,6 @@ class LoadPage:
             self.driver.switch_to.window(self.driver.window_handles[0])
         return list(all_hrefs)
 
-
-class LoadPage:
     def load_existing_hrefs(self, csv_filename):
         # Verificar si el archivo existe y no está vacío
         if os.path.exists(csv_filename) and os.path.getsize(csv_filename) > 0:
