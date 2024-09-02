@@ -8,28 +8,27 @@ import os
 
 def process_movies():
     urls_movies = [
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/6245e3e75b72240007129448", 
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/631a0596822bbc000747c340",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/604a66306fb8e0000718b7d5",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/6144cbd27bdf170007e1ea12",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/6419c584dbdaaa000845cad0",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e2efdab7606430009a60684",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/6245bf61a380fd00075eb902",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e664a3d461ef80007c74a4b",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e2f057012f8f9000947823a",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e664ad54d9608000711bf62",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e98ba08d29fad000774d8f1",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e45b93b0226550009f458f0",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e45b6c57cbf380009c9fd3c",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e45bb571dbf7b000935ab55",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/60cb966907f6370007c0e05e",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e664aac9cbc7000077f8ad9",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e98badabe135f0007f6fd38",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/60c0cc32c72308000700c61a",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/60cb97ae9f11af0007902c42",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/62473fdd9c333900071c587e",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5f90b50775cc210007c85400",
-        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/669eb36efe11e500084757fb"
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/6245e3e75b72240007129448", #Adrenalina Freezone
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/631a0596822bbc000747c340", #De Hollywood a tu hogar
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/604a66306fb8e0000718b7d5", #Estrellas de Acción
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/6144cbd27bdf170007e1ea12", #Mujeres Protagonistas
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/6419c584dbdaaa000845cad0", #La Mejor Compañía
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e2efdab7606430009a60684", #Cine Acción
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/6245bf61a380fd00075eb902", #Cine Maratón
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e664a3d461ef80007c74a4b", #Cine Sci-Fi
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e2f057012f8f9000947823a", #Cine Comedia
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e664ad54d9608000711bf62", #Cine Romance
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e98ba08d29fad000774d8f1", #Cine Suspenso
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e45b93b0226550009f458f0", #Cine Terror
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e45b6c57cbf380009c9fd3c", #Cine Drama
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e45bb571dbf7b000935ab55", #Cine Latino
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/60cb966907f6370007c0e05e", #Cine Anime
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e664aac9cbc7000077f8ad9", #Cine Nostalgia
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/5e98badabe135f0007f6fd38", #Cine Familia
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/60c0cc32c72308000700c61a", #Cine Animado
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/60cb97ae9f11af0007902c42", #Cine Documental
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/62473fdd9c333900071c587e", #Cine Español
+        "https://pluto.tv/latam/on-demand/618da9791add6600071d68b0/6539313c67bd1a00084d8023", #Viaje por las Décadas
     ]
     all_data = []
     page_loader = LoadPage()
@@ -58,12 +57,18 @@ def process_movies():
             except Exception as e:
                 print(f"Error al procesar la URL {href}: {e}. Continuando con la siguiente URL.")
 
-            # Guardar los resultados cada 10 iteraciones
-            if index % 10 == 0 or index == total_hrefs:
-                df = pd.DataFrame(all_data)
+            if index == 1 or index == total_hrefs:
+                df = pd.DataFrame(all_data, columns=[
+                    "Titulo",
+                    "Rating",
+                    "Genero",
+                    "Descripcion",
+                    "Link",
+                    "Duracion"
+                ])
                 if not df.empty:
                     file_exists = os.path.isfile('informacion_pluto_movies.csv')
-                    df.to_csv('informacion_pluto_movies.csv', mode='a', header=not file_exists, index=True)
+                    df.to_csv('informacion_pluto_movies.csv', mode='a', header=not file_exists, index=False)
                     all_data.clear()  # Limpiar la lista después de guardar para evitar duplicados
                 print(f"Progreso guardado: {index} de {total_hrefs} URLs procesadas")
 
@@ -158,14 +163,17 @@ def process_channels():
                 print(f"Error al procesar la URL {href}: {e}. Continuando con la siguiente URL.")
 
             # Guardar los resultados cada 10 iteraciones
-            if index % 10 == 0 or index == total_hrefs:
-                df = pd.DataFrame(all_data)
+            if index == 1 or index == total_hrefs:
+                df = pd.DataFrame(all_data, columns=[
+                    "Titulo",
+                    "Descripcion",
+                    "Link"
+                ])
                 if not df.empty:
                     file_exists = os.path.isfile('informacion_pluto_canales.csv')
                     df.to_csv('informacion_pluto_canales.csv', mode='a', header=not file_exists, index=False)
                     all_data.clear()  # Limpiar la lista después de guardar para evitar duplicados
                 print(f"Progreso guardado: {index} de {total_hrefs} URLs procesadas")
-
     finally:
         extractor.close()
         if data_loader:  # Solo cierra data_loader si ha sido inicializado
@@ -179,10 +187,10 @@ if __name__ == "__main__":
         #process_movies()
 
         print("Procesando series...")
-        process_series()
+        #process_series()
 
         print("Procesando canales...")
-        #process_channels()
+        process_channels()
 
     except TimeoutException:
         print("Error de tiempo de espera al obtener los hrefs. Verifica si la página ha cargado correctamente.")
