@@ -21,10 +21,10 @@ Peliculas tiempo: estimativo de 2hs (Se calcula 15s por toma debido al time.slee
 Resultados Obtenidos
 
 Canales(informacion_pluto_canales):
-Se extrajo información detallada sobre los canales disponibles en Pluto TV. Esto incluye títulos de programas, horarios de transmisión, y enlaces a los programas.
+Se extrajo información detallada sobre los canales disponibles en Pluto TV. Esto incluye títulos de programas, descripcion y enlaces al canal.
 
 Series(informacion_pluto_series):
-Para las series, se extrajo la información de cada temporada y episodio disponible, incluyendo el título del episodio, su duración, una breve descripción, y el enlace directo.
+Para las series, se extrajo Titulo, Rating, Genero, Descripcion, Temporadas, Link, Titulo Capitulo, Episodio, Duracion, Descripcion Capitulo y Link Capitulo
 
 Peliculas(informacion_pluto_movies):
 Se extrajo información detallada sobre los titulos, rating, genero, descripcion, link y duracion de cada una.
